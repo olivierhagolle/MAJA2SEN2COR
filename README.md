@@ -8,7 +8,9 @@ The command syntax is very simple.
 python MaccsMuscate2Sen2cor.py -p ../MaccsMuscate2Sen2cor/demo/MACCS_20170410 -w /tmp [-r FRE/SRE]
 ```
 -p is the input product, which type  (Native/Theia) is automatically recognized
+
 -w is the output directory
+
 -r is optionnal and allows to choose between SRE (Surface reflectance without terrain correction) and FRE (Flat reflectance (with terrain correction). By default, FRE is used.
 
 
