@@ -6,8 +6,10 @@ Class for masks Muscate product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -375,6 +377,6 @@ class MuscateMasks:
             
             logging.info('Mask for resolution %sm : %s' %(s_resol,s_MaskPath+'jp2'))
 
-            os.system('rm ' + s_MaskPath + 'jp2' + '.aux.xml')
-            os.system('rm ' + s_MaskPath + 'tif')
+            os.remove(s_MaskPath + 'jp2' + '.aux.xml')
+            os.remove(s_MaskPath + 'tif')
 

@@ -6,8 +6,10 @@ Class XmlTools
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -16,7 +18,8 @@ try:
 #----------------------------------------------------------------------------------------------------------
     import xml.dom.minidom
     from xml.dom import Node
-    
+    #from xml.dom.ext import PrettyPrint
+    #from StringIO import StringIO
 except Exception, e :
     print "Probleme with Python library : %s" %e
     raise Exception, "System exit with error"
@@ -67,6 +70,16 @@ class XmlTools:
                 return o_currentNode
 
         return None
+    
+    
+    def getAllTaggedNodes(cls,_o_parent, _s_tag):
+        """Get all child node with tag _s_tag
+
+        @param _o_parent : parent node
+        @param _s_tag : search tag
+        """
+        
+        return _o_parent.getElementsByTagName(_s_tag)
 
 
     def getChildrenElementNodes(self,_o_parent):
@@ -173,7 +186,11 @@ class XmlTools:
         @param _s_encoding : format encoding
         """
         
-        return _o_node.toprettyxml()
+        #o_stream = StringIO()
+        #PrettyPrint(_o_node, stream=o_stream, encoding=_s_encoding)
+        #return o_stream.getvalue()
+            
+        return _o_node.toxml()
 
         
     def createElementNode(self, _o_doc, _o_parentNode, _s_tag, _t_attribute, _s_text):

@@ -6,8 +6,10 @@ MACCS product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -78,11 +80,13 @@ class MACCSProduct:
         s_date = str(o_doc.getElementsByTagName('Acquisition_Date_Time').item(0).childNodes[0].nodeValue).replace('UTC=','').replace('-','').replace(':','')
         
         # product level
-        s_level = 'XXX'
+        s_level = 'L2A'
         
         # Orbit number
         if o_doc.getElementsByTagName('Acquisition_Orbit_Number'):
             s_orbit = str(o_doc.getElementsByTagName('Acquisition_Orbit_Number').item(0).childNodes[0].nodeValue)
+            s_default = '000000'
+            s_orbit = s_default[0:6-len(s_orbit)] + s_orbit
         else:
             s_orbit = 'A000000'
         

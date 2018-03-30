@@ -6,8 +6,10 @@ Class for dimap MACCS product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -244,7 +246,8 @@ class MACCSDimap(MACCSMasks):
 
         logging.info('Write metadata from Sen2cor product finish without error')
         
-        
+    
+    
     @classmethod
     def Convert( cls
                , _s_productPath

@@ -6,8 +6,10 @@ Class for AOT Muscate product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -84,4 +86,4 @@ class MuscateAOTMap:
 
             logging.info('AOT image for resolution %sm : %s' %(s_resol,s_AOTPath))
 
-            os.system('rm ' + s_AOTPath + '.aux.xml')
+            os.remove(s_AOTPath + '.aux.xml')

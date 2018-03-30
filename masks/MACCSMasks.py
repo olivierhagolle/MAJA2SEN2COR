@@ -6,8 +6,10 @@ Class for masks MACCS product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -24,7 +26,7 @@ try:
     from gdalconst import *
     import numpy as np
     import xml.dom.minidom
-    import pdb
+    
     
 except Exception, e :
     print "Probleme with Python library : %s" %e
@@ -341,13 +343,13 @@ class MACCSMasks:
             s_date = str(o_doc.getElementsByTagName('Acquisition_Date_Time').item(0).childNodes[0].nodeValue).replace('UTC=','').replace('-','').replace(':','')
         
             # product level
-            s_level = 'XXX'
+            s_level = 'L2A'
 
             # tile name
             s_tile = 'T' + s_productName[4]
         
             # Create mask name
-            s_name = '_'.join([s_level,s_tile,s_date[0] + 'T' + s_date[1],'SCL',str(s_resol)+'m.'])
+            s_name = '_'.join([s_level,s_tile,s_date[0:8] + 'T' + s_date[9:],'SCL',str(s_resol)+'m.'])
         
             # Path for mask
             s_MaskPath = os.path.join(s_path, 'R' + str(s_resol) + 'm',s_name)
@@ -385,5 +387,5 @@ class MACCSMasks:
             
             logging.info('Mask for resolution %sm : %s' %(s_resol,s_MaskPath+'jp2'))
 
-            os.system('rm ' + s_MaskPath + 'jp2' + '.aux.xml')
-            os.system('rm ' + s_MaskPath + 'tif')
+            os.remove(s_MaskPath + 'jp2' + '.aux.xml')
+            os.remove(s_MaskPath + 'tif')

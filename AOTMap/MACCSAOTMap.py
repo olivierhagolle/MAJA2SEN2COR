@@ -6,8 +6,10 @@ Class for AOT MACCS product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -20,6 +22,7 @@ try:
     import glob
     import logging
     import xml.dom.minidom
+    
     
 except Exception, e :
     print "Probleme with Python library : %s" %e
@@ -72,15 +75,15 @@ class MACCSAOTMap:
         
             # date
             s_date = str(o_doc.getElementsByTagName('Acquisition_Date_Time').item(0).childNodes[0].nodeValue).replace('UTC=','').replace('-','').replace(':','')
-        
+            
             # product level
-            s_level = 'XXX'
+            s_level = 'L2A'
 
             # tile name
             s_tile = 'T' + s_productName[4]
         
             # Create water vapor image name
-            s_name = '_'.join([s_level,s_tile,s_date[0] + 'T' + s_date[1],'AOT_'+str(s_resol)+'m.jp2'])
+            s_name = '_'.join([s_level,s_tile,s_date[0:8] + 'T' + s_date[9:],'AOT_'+str(s_resol)+'m.jp2'])
         
             # Path for AOT image
             s_AOTPath = os.path.join(s_path, 'R' + str(s_resol) + 'm',s_name)
@@ -91,4 +94,4 @@ class MACCSAOTMap:
 
             logging.info('AOT image for resolution %sm : %s' %(s_resol,s_AOTPath))
 
-            os.system('rm ' + s_AOTPath + '.aux.xml')
+            os.remove(s_AOTPath + '.aux.xml')

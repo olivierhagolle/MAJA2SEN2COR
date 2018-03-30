@@ -6,8 +6,10 @@ Class for reflectance Muscate product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -90,12 +92,14 @@ class MuscateReflectImgs:
         
             # band name
             s_band = t_matches[i].split('.')[0].split('_')[-1]
+            if len(s_band)==2:
+                s_band = s_band[0] + '0' + s_band[1]
         
             # Create reflectance image name
             s_name = '_'.join([s_level,s_tile,s_date[0] + 'T' + s_date[1],s_band,str(s_resol)+'m.jp2'])
         
             # Path for reflectance image
-            s_ReflPath = os.path.join(s_path, 'R' + str(s_resol) + 'm',s_name)
+            s_ReflPath = os.path.join(s_path, 'R' + str(s_resol) + 'm', str(s_name))
 
             # Translate to jp2 with lossless compression
             cmd = "gdal_translate -of JP2OpenJPEG -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_ReflPath
@@ -103,5 +107,5 @@ class MuscateReflectImgs:
 
             logging.info('Reflectance image for resolution %sm : %s' %(s_resol,s_ReflPath))
 
-            os.system('rm ' + s_ReflPath + '.aux.xml')
+            os.remove(s_ReflPath + '.aux.xml')
             

@@ -6,8 +6,10 @@ Muscate product
 
 @version: 1.0 
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 try:
@@ -16,6 +18,8 @@ try:
 #----------------------------------------------------------------------------------------------------------
     import os
     import logging
+    import glob
+    import xml.dom.minidom
     
     from AOTMap.MuscateAOTMap import MuscateAOTMap
     from reflectImgs.MuscateReflectImgs import MuscateReflectImgs
@@ -64,6 +68,11 @@ class MuscateProduct:
         """
         
         s_productName = os.path.basename(self.s_productPath).split('_')
+        s_header =glob.glob(os.path.join(self.s_productPath, '*_MTD_ALL.xml'))[0]
+        
+        o_file = open(s_header,'r')
+        s_file = o_file.read()
+        o_doc = xml.dom.minidom.parseString( s_file )
         
         # date
         s_date = s_productName[1].split('-')
@@ -75,7 +84,13 @@ class MuscateProduct:
         s_tile = s_productName[3]
         
         # Create a directory name
-        s_name = '_'.join([s_level,s_tile,'A000000',s_date[0] + 'T' + s_date[1]])
+        if o_doc.getElementsByTagName('ORBIT_NUMBER'):
+            s_orbit = str(o_doc.getElementsByTagName('ORBIT_NUMBER').item(0).childNodes[0].nodeValue)
+            s_default = '000000'
+            s_orbit = 'A' + s_default[0:6-len(s_orbit)] + s_orbit
+        else:
+            s_orbit='A000000'
+        s_name = '_'.join([s_level,s_tile,s_orbit,s_date[0] + 'T' + s_date[1]])
         
         return s_name
         

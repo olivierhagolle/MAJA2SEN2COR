@@ -6,8 +6,10 @@ Converte MACCS or Muscate product to Sen2cor
 
 @version: 1.0
 
-@author: Aurelie COURTOIS (THALES)
+@author: Aurelie COURTOIS (THALES) for French Space Agency (CNES)
 @date: 06/06/2017
+
+This converter is a free and open source software under the CeCILL-v2.1 license (French equivalent to GPL)
 """
 
 
@@ -21,7 +23,8 @@ try:
     import logging
     import os
     import numpy as np
-    import pdb
+    import shutil
+    
     
     from product.MACCSS2Product import MACCSS2Product
     from product.MACCSProduct import MACCSProduct
@@ -41,7 +44,7 @@ if __name__ == '__main__':
     try:
 
         # Initialise logger
-        nowDate = datetime.strftime(datetime.now(),'%Y-%m-%dT%H:%M:%S')
+        nowDate = datetime.strftime(datetime.now(),'%Y-%m-%dT%H-%M-%S')
         logging.basicConfig(filename='Convert2Sen2cor_%s.log'%(nowDate), \
             format='%(asctime)s %(levelname)s %(message)s \t', level=logging.INFO)
             
@@ -72,7 +75,15 @@ if __name__ == '__main__':
             print 'Error in parsing of command line'
             print e
             sys.exit(-1)
-            
+        
+        logging.info('############')
+        logging.info('Command line')
+        logging.info('############')
+        
+        logging.info('Product path: %s'%args['product'])
+        logging.info('Reflectance type: %s'%args['reflType'])
+        logging.info('Workspace: %s'%args['workspace'])
+        
         
         logging.info('#########################################')    
         logging.info('Create repository for new Sen2cor product')
@@ -122,6 +133,7 @@ if __name__ == '__main__':
         # Create directories
         s_name = o_product.getName()
         os.makedirs(os.path.join(s_workspace, 'GRANULE', s_name, 'IMG_DATA'))
+        os.makedirs(os.path.join(s_workspace, 'GRANULE', s_name, 'QI_DATA'))
         
         
         
@@ -162,16 +174,16 @@ if __name__ == '__main__':
         
         
         # move log into workspace
-        os.system('mv Convert2Sen2cor_%s.log %s'%(nowDate,s_workspace))
+        shutil.move('Convert2Sen2cor_%s.log'%nowDate, s_workspace)
     except SystemExit:
         logging.info('Programme stop')
         # move log into workspace
         if args != None:
-            os.system('mv Convert2Sen2cor_%s.log %s'%(nowDate,s_workspace))
+            shutil.move('Convert2Sen2cor_%s.log'%nowDate, s_workspace)
         sys.exit(0)
     except Exception, e:
         logging.exception("Exception : %s" % e)
         # move log into workspace
-        os.system('mv Convert2Sen2cor_%s.log %s'%(nowDate,s_workspace))
+        shutil.move('Convert2Sen2cor_%s.log'%nowDate, s_workspace)
         logging.info('Programme stop')
         sys.exit(100)
