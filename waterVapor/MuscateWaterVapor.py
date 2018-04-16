@@ -83,7 +83,7 @@ class MuscateWaterVapor:
             s_WVPPath = os.path.join(s_path, 'R' + str(s_resol) + 'm',s_name)
 
             # Translate to jp2 with lossless compression
-            cmd = "gdal_translate -of JP2OpenJPEG -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_WVPPath
+            cmd = "gdal_translate -of JP2OpenJPEG -ot UInt16 -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_WVPPath
             os.system(cmd)
 
             logging.info('Water vapor image for resolution %sm : %s' %(s_resol,s_WVPPath))

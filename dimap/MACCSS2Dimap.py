@@ -690,3 +690,27 @@ class MACCSS2Dimap(MACCSMasks):
         
         # Write Sen2cor metadata 2
         cls.WriteSen2corMetadata_2(_s_productPath, d_dimapValue, t_typeGIPP, t_GIPP, s_dimapPathNew)
+
+
+    def getQuantificationValue( self
+                              , _s_productPath
+                              ):
+        """
+        Get reflectance quantification value from Muscate metadata file
+        @param _s_productPath : path for product to convert
+        """
+        
+        logging.info('Read metadata from MACCS product : %s to get reflectance quantification value',_s_productPath)
+        
+        # Metadata from MACCS
+        s_dimapPathOld = glob.glob(os.path.join(_s_productPath, '*SC_*.HDR'))
+        if len(s_dimapPathOld) == 0:
+            logging.warn('No dimap for product %s'%_s_productPath)
+        else:
+            s_dimapPathOld = s_dimapPathOld[0]
+                
+        o_docMACCS = XmlTools(s_dimapPathOld)
+        o_rootMACCS = o_docMACCS.getRootNode()
+        Refl_QV = o_docMACCS.getNodeValue( o_docMACCS.getIndirectNode( o_rootMACCS, 'Reflectance_Quantification_Value' ) )
+        
+        return Refl_QV

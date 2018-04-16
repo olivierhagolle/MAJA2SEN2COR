@@ -81,7 +81,7 @@ class MuscateAOTMap:
             s_AOTPath = os.path.join(s_path, 'R' + str(s_resol) + 'm',s_name)
 
             # Translate to jp2 with lossless compression
-            cmd = "gdal_translate -of JP2OpenJPEG -b 2 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_AOTPath
+            cmd = "gdal_translate -of JP2OpenJPEG -ot UInt16 -b 2 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_AOTPath
             os.system(cmd)
 
             logging.info('AOT image for resolution %sm : %s' %(s_resol,s_AOTPath))

@@ -21,6 +21,12 @@ try:
     import fnmatch
     import glob
     import logging
+    import gdal
+    from gdalconst import *
+    import numpy as np
+    import shutil
+    
+    from dimap.MuscateDimap import MuscateDimap
     
 except Exception, e :
     print "Probleme with Python library : %s" %e
@@ -65,6 +71,10 @@ class MuscateReflectImgs:
                 logging.warn('No reflectance image find')
         
         
+        Refl_QV = float(MuscateDimap().getQuantificationValue(_s_productPath))
+        if Refl_QV > 1:
+            Refl_QV = 1 / Refl_QV
+        
         # Search resolution for reflectance image
         for i in range(len(t_matches)):
             GdalInfo = subprocess.check_output('gdalinfo {}'.format(t_matches[i]), shell=True).split('\n')
@@ -101,11 +111,24 @@ class MuscateReflectImgs:
             # Path for reflectance image
             s_ReflPath = os.path.join(s_path, 'R' + str(s_resol) + 'm', str(s_name))
 
+            # Set 0 for nodata and set quantification value to 10000 for SNAP
+            s_fileNameNoData = os.path.join(_s_workingDir, 'TMP', os.path.split(t_matches[i])[1])
+            if not os.path.exists(os.path.join(_s_workingDir, 'TMP')):
+                os.mkdir(os.path.join(_s_workingDir, 'TMP'))
+            shutil.copy(t_matches[i], s_fileNameNoData)
+            dataset = gdal.Open(s_fileNameNoData, GA_Update)
+            o_band = dataset.GetRasterBand(1)
+            t_array = o_band.ReadAsArray()
+            t_array = np.where(t_array==-10000, 0, t_array) * (Refl_QV*10000)
+            o_band.WriteArray(t_array)
+            dataset = None
+            
             # Translate to jp2 with lossless compression
-            cmd = "gdal_translate -of JP2OpenJPEG -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + t_matches[i] + " " + s_ReflPath
+            cmd = "gdal_translate -of JP2OpenJPEG -ot UInt16 -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + s_fileNameNoData + " " + s_ReflPath
             os.system(cmd)
 
             logging.info('Reflectance image for resolution %sm : %s' %(s_resol,s_ReflPath))
 
             os.remove(s_ReflPath + '.aux.xml')
+        shutil.rmtree(os.path.join(_s_workingDir, 'TMP'))
             

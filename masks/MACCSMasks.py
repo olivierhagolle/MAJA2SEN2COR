@@ -381,7 +381,7 @@ class MACCSMasks:
             o_newMask=None
 
             # Translate to jp2 with lossless compression
-            cmd = "gdal_translate -of JP2OpenJPEG -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + s_MaskPath+'tif' + " " + s_MaskPath+'jp2'
+            cmd = "gdal_translate -of JP2OpenJPEG -ot Byte -b 1 -co QUALITY=100 -co REVERSIBLE=YES " + s_MaskPath+'tif' + " " + s_MaskPath+'jp2'
             os.system(cmd)
             
             
