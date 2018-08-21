@@ -95,5 +95,6 @@ class MACCSWaterVapor:
 
             logging.info('Water vapor image for resolution %sm : %s' %(s_resol,s_WVPPath))
 
-            os.remove(s_WVPPath + '.aux.xml')
+            if os.path.exists(s_WVPPath + '.aux.xml'):
+                os.remove(s_WVPPath + '.aux.xml')
 

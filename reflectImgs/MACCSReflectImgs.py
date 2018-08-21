@@ -26,7 +26,7 @@ try:
     from gdalconst import *
     import numpy as np
     import shutil
-    import pdb
+    
     from dimap.MACCSDimap import MACCSDimap
     
 except Exception, e :
@@ -143,7 +143,8 @@ class MACCSReflectImgs:
 
                 logging.info('Reflectance image for resolution %sm : %s' %(s_resol,s_ReflPath))
 
-                os.remove(s_ReflPath + '.aux.xml')
+                if os.path.exists(s_ReflPath + '.aux.xml'):
+                    os.remove(s_ReflPath + '.aux.xml')
             
             dataset = None
         shutil.rmtree(os.path.join(_s_workingDir, 'TMP'))

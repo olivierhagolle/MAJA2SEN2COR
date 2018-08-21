@@ -129,6 +129,7 @@ class MuscateReflectImgs:
 
             logging.info('Reflectance image for resolution %sm : %s' %(s_resol,s_ReflPath))
 
-            os.remove(s_ReflPath + '.aux.xml')
+            if os.path.exists(s_ReflPath + '.aux.xml'):
+                os.remove(s_ReflPath + '.aux.xml')
         shutil.rmtree(os.path.join(_s_workingDir, 'TMP'))
             

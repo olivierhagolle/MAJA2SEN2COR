@@ -377,6 +377,8 @@ class MuscateMasks:
             
             logging.info('Mask for resolution %sm : %s' %(s_resol,s_MaskPath+'jp2'))
 
-            os.remove(s_MaskPath + 'jp2' + '.aux.xml')
-            os.remove(s_MaskPath + 'tif')
+            if os.path.exists(s_MaskPath + 'jp2' + '.aux.xml'):
+                os.remove(s_MaskPath + 'jp2' + '.aux.xml')
+            if os.path.exists(s_MaskPath + 'tif'):
+                os.remove(s_MaskPath + 'tif')
 

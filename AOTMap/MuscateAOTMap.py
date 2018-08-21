@@ -86,4 +86,5 @@ class MuscateAOTMap:
 
             logging.info('AOT image for resolution %sm : %s' %(s_resol,s_AOTPath))
 
-            os.remove(s_AOTPath + '.aux.xml')
+            if os.path.exists(s_AOTPath + '.aux.xml'):
+                os.remove(s_AOTPath + '.aux.xml')
