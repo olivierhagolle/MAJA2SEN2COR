@@ -430,13 +430,18 @@ class MuscateDimap(MuscateMasks):
         d_dimapValue['AOT_quantification_value'] = o_docMuscate.getNodeValue( o_docMuscate.getIndirectNode( o_rootMuscate, 'AEROSOL_OPTICAL_THICKNESS_QUANTIFICATION_VALUE' ) )
         
         # GIPP
-        o_GIPP_files = o_docMuscate.extractNode(o_docMuscate.getIndirectNode( o_rootMuscate, 'Auxiliary_Data_List' ))
-        t_typeGIPP = []
-        t_GIPP = []
-        for o_node in o_docMuscate.getAllTaggedNodes(o_GIPP_files, 'NATURE'):
-            t_typeGIPP.append(o_docMuscate.getNodeValue(o_node))
-        for o_node in o_docMuscate.getAllTaggedNodes(o_GIPP_files, 'DATA'):
-            t_GIPP.append(o_docMuscate.getNodeValue(o_node))
+        try :
+            o_GIPP_files = o_docMuscate.extractNode(o_docMuscate.getIndirectNode( o_rootMuscate, 'Auxiliary_Data_List' ))
+            t_typeGIPP = []
+            t_GIPP = []
+            for o_node in o_docMuscate.getAllTaggedNodes(o_GIPP_files, 'NATURE'):
+                t_typeGIPP.append(o_docMuscate.getNodeValue(o_node))
+            for o_node in o_docMuscate.getAllTaggedNodes(o_GIPP_files, 'DATA'):
+                t_GIPP.append(o_docMuscate.getNodeValue(o_node))
+        except Exception as exception:
+            logging.info('No GIPP files in metadata')
+            t_typeGIPP = []
+            t_GIPP = []
         
         return d_dimapValue, t_typeGIPP, t_GIPP
         
